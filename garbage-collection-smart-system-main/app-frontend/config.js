@@ -1,0 +1,1 @@
+export const API_URL = 'https://ecosyz-backend.onrender.com/api';
