@@ -1,1 +1,1 @@
-export const API_URL = 'https://ecosyz-backend.onrender.com/api';
+export const API_URL = 'https://garbage-collection1.onrender.com/api';
