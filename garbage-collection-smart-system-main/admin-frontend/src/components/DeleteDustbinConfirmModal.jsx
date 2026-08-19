@@ -1,3 +1,4 @@
+'use client';
 import { X, AlertTriangle, Trash2 } from 'lucide-react'
 
 export default function DeleteDustbinConfirmModal({ isOpen, onClose, dustbin, onConfirmDelete }) {

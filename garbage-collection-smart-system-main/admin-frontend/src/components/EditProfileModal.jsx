@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect } from 'react'
 import { X, Upload } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -17,7 +18,7 @@ export default function EditProfileModal({ isOpen, onClose, user, onSave }) {
 
   useEffect(() => {
     if (isOpen) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [isOpen]);
 

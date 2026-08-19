@@ -1,3 +1,4 @@
+'use client';
 import logo from '../assets/images/logo.png';
 
 export default function LoadingSpinner() {
@@ -18,7 +19,7 @@ export default function LoadingSpinner() {
           
           {/* Logo Icon */}
           <div className="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center shadow-lg shadow-emerald-500/10 breathe-logo">
-            <img src={logo} alt="EcoSyz Logo" className="w-8 h-8 object-contain drop-shadow-sm" />
+            <img src={logo?.src || logo} alt="EcoSyz Logo" className="w-8 h-8 object-contain drop-shadow-sm" />
           </div>
         </div>
 

@@ -1,3 +1,4 @@
+'use client';
 export default function KPICard({ title, value, subtitle, icon: Icon, color = 'teal' }) {
   const gradients = {
     teal: 'from-[#1f9e9a] to-[#16847f]',

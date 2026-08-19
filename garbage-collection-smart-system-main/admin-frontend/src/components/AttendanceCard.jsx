@@ -1,10 +1,11 @@
-import { useNavigate } from 'react-router-dom'
+'use client';
+import { useRouter } from 'next/navigation'
 import { ArrowRight, Users } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
 
 export default function AttendanceCard({ total = 0, present = 0, recent = [] }) {
   const { isDark } = useTheme()
-  const navigate = useNavigate()
+  const router = useRouter()
   const percentage = total > 0 ? Math.round((present / total) * 100) : 0
   const absent = total - present
 
@@ -63,7 +64,7 @@ export default function AttendanceCard({ total = 0, present = 0, recent = [] }) 
       </div>
 
       <button
-        onClick={() => navigate('/attendance')}
+        onClick={() => router.push('/attendance')}
         className="text-[#1f9e9a] text-xs font-semibold flex items-center gap-1.5 hover:gap-2.5 transition-all duration-200 group"
       >
         View Attendance Management

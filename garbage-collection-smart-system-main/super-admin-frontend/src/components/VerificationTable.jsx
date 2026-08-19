@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState } from "react";
 import { Search, Eye, Check, X, Filter } from "lucide-react";
 import api from "../api/axios";

@@ -1,3 +1,4 @@
+'use client';
 import { PieChart, Pie, Cell, Legend, ResponsiveContainer } from 'recharts'
 import { useTheme } from '../contexts/ThemeContext'
 

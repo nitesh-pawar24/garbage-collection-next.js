@@ -53,7 +53,7 @@ function App() {
     const navigate = (newView) => {
         setView(newView);
         sessionStorage.setItem('currentView', newView);
-        window.scrollTo(0, 0);
+        if (typeof window !== 'undefined') window.scrollTo(0, 0);
     };
 
     const renderView = () => {

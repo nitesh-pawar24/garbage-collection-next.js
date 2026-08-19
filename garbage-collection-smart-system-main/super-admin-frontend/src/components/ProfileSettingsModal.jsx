@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 import { X, Building2, Phone, Mail, MapPin, Globe, Calendar, Shield } from "lucide-react";

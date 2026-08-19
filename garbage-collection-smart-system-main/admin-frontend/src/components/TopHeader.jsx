@@ -1,61 +1,24 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
-import {
-  Search, Bell, Settings, LogOut, Moon, Sun, Menu, ChevronDown,
-  User, CheckCircle2, AlertCircle, Clock, Trash2
-} from 'lucide-react'
-import { useNavigate, Link } from 'react-router-dom'
+'use client';
+import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
+import { Search, Moon, Sun, ChevronDown, User, LogOut, Menu } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
 import LogoutConfirmation from './LogoutConfirmation'
 import api from '../api/axios'
 
 export default function TopHeader({ onMenuClick }) {
-  const navigate = useNavigate()
   const { isDark, toggleTheme } = useTheme()
+  const router = useRouter()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [showResults, setShowResults] = useState(false)
-  const [isSearching, setIsSearching] = useState(false)
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
-  const [searchResults, setSearchResults] = useState({
-    employees: [],
-    households: [],
-    dustbins: [],
-    wards: [],
-    complaints: [],
-    wasteRecords: []
-  })
-
   const dropdownRef = useRef(null)
+  
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState({ employees: [], households: [], dustbins: [], wards: [] })
+  const [isSearching, setIsSearching] = useState(false)
+  const [showResults, setShowResults] = useState(false)
   const searchRef = useRef(null)
 
-  // Handle Search logic
-  const performSearch = useCallback(async (query) => {
-    if (query.length < 2) {
-      setSearchResults({ employees: [], households: [], dustbins: [], wards: [], complaints: [], wasteRecords: [] })
-      setShowResults(false)
-      return
-    }
-
-    setIsSearching(true)
-    try {
-      const res = await api.get(`/search?q=${query}`)
-      setSearchResults(res.data)
-      setShowResults(true)
-    } catch (err) {
-      console.error('Search failed:', err)
-    } finally {
-      setIsSearching(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (searchQuery) performSearch(searchQuery)
-    }, 400)
-    return () => clearTimeout(timer)
-  }, [searchQuery, performSearch])
-
-  // Click outside to close models
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -69,6 +32,28 @@ export default function TopHeader({ onMenuClick }) {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      if (searchQuery.trim().length >= 2) {
+        setIsSearching(true)
+        try {
+          const res = await api.get(`/search?q=${encodeURIComponent(searchQuery)}`)
+          setSearchResults(res.data)
+          setShowResults(true)
+        } catch (error) {
+          console.error("Global search failed:", error)
+        } finally {
+          setIsSearching(false)
+        }
+      } else {
+        setSearchResults({ employees: [], households: [], dustbins: [], wards: [] })
+        setShowResults(false)
+      }
+    }, 300)
+
+    return () => clearTimeout(delayDebounceFn)
+  }, [searchQuery])
+
   const handleLogoutClick = () => {
     setIsDropdownOpen(false)
     setShowLogoutConfirm(true)
@@ -77,54 +62,64 @@ export default function TopHeader({ onMenuClick }) {
   const handleLogoutConfirm = async () => {
     try {
       await api.post('/auth/logout')
+    } catch {}
+    if (typeof window !== 'undefined') {
       localStorage.removeItem('token')
-      navigate('/')
-    } catch (err) {
-      console.error('Logout failed:', err)
-      localStorage.removeItem('token')
-      navigate('/')
+      localStorage.removeItem('user')
+      sessionStorage.clear()
+      window.location.href = '/'
     }
   }
 
   const handleProfileSettings = () => {
     setIsDropdownOpen(false)
-    navigate('/profile-settings')
+    router.push('/profile-settings')
   }
 
-  const ResultSection = ({ title, items, type, renderItem }) => {
+  const handleSelectResult = (path) => {
+    setShowResults(false)
+    setSearchQuery('')
+    router.push(path)
+  }
+
+  const hasResults = searchResults.employees.length > 0 || 
+                     searchResults.households.length > 0 || 
+                     searchResults.dustbins.length > 0 || 
+                     searchResults.wards.length > 0
+
+  const ResultSection = ({ title, items, renderItem, type }) => {
     if (!items || items.length === 0) return null
     return (
       <div className="p-2">
-        <h4 className="px-3 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-widest">{title}</h4>
-        {items.slice(0, 3).map((item, idx) => (
-          <button
-            key={idx}
-            className="w-full text-left px-3 py-2 rounded-lg hover:bg-teal-50 group transition-colors"
-            onClick={() => {
-              setShowResults(false)
-              setSearchQuery('')
-              // Logic to navigate based on type
-              if (type === 'employee') navigate('/attendance')
-              if (type === 'household') navigate('/household')
-              if (type === 'dustbin') navigate('/dustbin')
-              if (type === 'complaint') navigate('/reports')
-              if (type === 'ward') navigate('/wards')
-            }}
-          >
-            {renderItem(item)}
-          </button>
-        ))}
+        <p className="text-[10px] font-extrabold uppercase tracking-widest text-teal-600 dark:text-teal-400 px-3 py-1 bg-teal-500/5 rounded-lg mb-1">
+          {title} ({items.length})
+        </p>
+        <div className="space-y-1">
+          {items.map((item, idx) => (
+            <div
+              key={idx}
+              onClick={() => {
+                if (type === 'employee') handleSelectResult('/employee')
+                if (type === 'household') handleSelectResult('/household')
+                if (type === 'dustbin') handleSelectResult('/dustbin')
+                if (type === 'ward') handleSelectResult('/ward')
+              }}
+              className="px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 cursor-pointer flex flex-col gap-0.5 transition-colors group"
+            >
+              {renderItem(item)}
+            </div>
+          ))}
+        </div>
       </div>
     )
   }
 
-  const hasResults = Object.values(searchResults).some(arr => arr && arr.length > 0)
-
   return (
     <>
-      <div className="fixed top-0 right-0 left-0 lg:left-64 h-16 flex items-center justify-between px-4 sm:px-6 z-[10001]"
+      <div
+        className="flex items-center justify-between px-4 lg:px-6 py-3 border-b sticky top-0 z-30 transition-all"
         style={{
-          background: isDark ? 'rgba(15,23,42,0.95)' : 'rgba(255,255,255,0.92)',
+          background: isDark ? 'rgba(15, 23, 42, 0.85)' : 'rgba(255, 255, 255, 0.85)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
           borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.06)',
@@ -217,7 +212,7 @@ export default function TopHeader({ onMenuClick }) {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center gap-2 p-1 lg:pl-2 lg:pr-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all"
+              className="flex items-center gap-2 p-1 lg:pl-2 lg:pr-3 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800 transition-all"
             >
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center text-white text-xs font-black shadow-sm">
                 A

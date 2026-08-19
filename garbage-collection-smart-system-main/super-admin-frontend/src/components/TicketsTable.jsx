@@ -1,3 +1,4 @@
+'use client';
 import { useState } from 'react';
 import { Search, Eye } from 'lucide-react';
 import TicketDetailsModal from './TicketDetailsModal';

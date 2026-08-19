@@ -1,3 +1,4 @@
+'use client';
 // frontend/src/component/RegistrationPage.jsx
 
 import React, { useState } from 'react';

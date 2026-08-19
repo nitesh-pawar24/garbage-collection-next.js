@@ -1,3 +1,4 @@
+'use client';
 import { LogOut, X } from 'lucide-react'
 
 export default function LogoutConfirmation({ isOpen, onClose, onLogout }) {

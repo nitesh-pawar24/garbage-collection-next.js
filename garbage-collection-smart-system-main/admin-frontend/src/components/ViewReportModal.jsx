@@ -1,3 +1,4 @@
+'use client';
 import { useRef, useEffect } from 'react'
 import { X, Download, FileSpreadsheet, ImageIcon, AlertCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -13,7 +14,7 @@ export default function ViewReportModal({ isOpen, onClose, report }) {
     useEffect(() => {
         if (isOpen && modalContentRef.current) {
             modalContentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }, [isOpen, report]);
 

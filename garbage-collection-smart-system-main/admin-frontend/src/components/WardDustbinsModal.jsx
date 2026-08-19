@@ -1,10 +1,11 @@
+'use client';
 import { useEffect } from 'react'
 import { X, Trash2 } from "lucide-react"
 
 export default function WardDustbinsModal({ isOpen, onClose, wardName, dustbins }) {
   useEffect(() => {
     if (isOpen) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [isOpen]);
 

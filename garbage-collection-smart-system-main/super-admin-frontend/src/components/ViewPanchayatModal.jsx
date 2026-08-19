@@ -1,3 +1,4 @@
+'use client';
 import { X, Check, XCircle, User, MapPin, Phone, Mail, Home, Users, FileText, ExternalLink } from "lucide-react";
 
 function InfoItem({ label, value }) {
@@ -33,7 +34,7 @@ function DocCard({ title, file, baseURL }) {
 
 export default function ViewPanchayatModal({ isOpen, onClose, data, onApprove, onReject }) {
   if (!isOpen || !data) return null;
-  const baseURL = import.meta.env.VITE_API_URL || "http://localhost:10000";
+  const baseURL = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://garbage-collection1.onrender.com/api") || "http://localhost:10000";
   const isPending = data.status === "pending";
 
   return (

@@ -1,3 +1,4 @@
+'use client';
 import logo from '../assets/images/logo.png'
 
 /**
@@ -20,7 +21,7 @@ export default function PageLoader({ message = 'Loading…' }) {
         <div className="relative w-16 h-16 rounded-2xl shadow-xl flex items-center justify-center animate-bounce bg-white border border-gray-50"
           style={{ animationDuration: '1.4s' }}
         >
-          <img src={logo} alt="EcoSyz Logo" className="w-10 h-10 object-contain drop-shadow-sm" />
+          <img src={logo?.src || logo} alt="EcoSyz Logo" className="w-10 h-10 object-contain drop-shadow-sm" />
         </div>
       </div>
 

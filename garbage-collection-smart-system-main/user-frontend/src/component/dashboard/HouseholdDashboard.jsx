@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
@@ -74,7 +75,7 @@ const HouseholdDashboard = ({ navigate }) => {
     const [complaints, setComplaints] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showLogoutModal, setShowLogoutModal] = useState(false);
-    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    const user = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('user') || 'null') : null;
     const initials = user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'U';
 
     const [dashboardData, setDashboardData] = useState({

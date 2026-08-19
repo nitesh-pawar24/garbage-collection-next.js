@@ -1,46 +1,54 @@
-import { createContext, useContext, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+'use client';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
-const ThemeContext = createContext(null)
+const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
   const [isDark, setIsDark] = useState(() => {
-    const saved = localStorage.getItem('adminTheme')
-    return saved ? saved === 'dark' : false
-  })
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('adminTheme');
+      return saved ? saved === 'dark' : false;
+    }
+    return false;
+  });
 
   useEffect(() => {
-    localStorage.setItem('adminTheme', isDark ? 'dark' : 'light')
-  }, [isDark])
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('adminTheme', isDark ? 'dark' : 'light');
+    }
+  }, [isDark]);
 
-  const toggleTheme = () => setIsDark(prev => !prev)
+  const toggleTheme = () => setIsDark(prev => !prev);
 
   return (
     <ThemeContext.Provider value={{ isDark, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
-  )
+  );
 }
 
 /**
  * Component to apply the 'dark' class to the root element based on theme state and current route.
  */
 export function ThemeWatcher() {
-  const { isDark } = useTheme()
-  const location = useLocation()
+  const { isDark } = useTheme();
+  const pathname = usePathname();
 
   useEffect(() => {
-    const root = document.documentElement
-    const isLoginPage = location.pathname === '/'
+    if (typeof document !== 'undefined') {
+      const root = document.documentElement;
+      const isLoginPage = pathname === '/' || pathname === '/login';
 
-    if (isDark && !isLoginPage) {
-      root.classList.add('dark')
-    } else {
-      root.classList.remove('dark')
+      if (isDark && !isLoginPage) {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
     }
-  }, [isDark, location.pathname])
+  }, [isDark, pathname]);
 
-  return null
+  return null;
 }
 
-export const useTheme = () => useContext(ThemeContext)
+export const useTheme = () => useContext(ThemeContext);

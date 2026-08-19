@@ -1,74 +1,77 @@
+'use client';
 import { LayoutDashboard, CreditCard, HelpCircle, Layers, Leaf, ChevronRight, X } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-const navItems = [
-  { id: 1, name: "Panchayat Verification", sub: "Review & approve registrations", icon: LayoutDashboard, path: "/dashboard" },
-  { id: 2, name: "Subscription Plans",     sub: "Manage plan tiers & pricing",    icon: Layers,          path: "/subscriptions" },
-  { id: 3, name: "Payment Monitoring",     sub: "Track payments & transactions",  icon: CreditCard,      path: "/payments" },
-  { id: 4, name: "Support & Queries",      sub: "Handle tickets & issues",        icon: HelpCircle,      path: "/support" },
+const NAV_ITEMS = [
+  { name: "Panchayat Verification", path: "/dashboard", sub: "Review & manage requests", icon: LayoutDashboard },
+  { name: "Subscription Plans", path: "/subscriptions", sub: "Tiers & pricing setup", icon: Layers },
+  { name: "Payment Monitoring", path: "/payments", sub: "Transactions & payouts", icon: CreditCard },
+  { name: "Support & Queries", path: "/support", sub: "Tickets & complaints", icon: HelpCircle },
 ];
 
 export default function Sidebar({ onClose }) {
-  return (
-    <div className="w-[260px] bg-slate-900 text-white flex flex-col h-screen shrink-0 relative overflow-hidden">
-      {/* Subtle top glow */}
-      <div className="absolute -top-[60px] left-1/2 -translate-x-1/2 w-[300px] h-[200px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(99,102,241,0.3) 0%, transparent 70%)" }} />
+  const pathname = usePathname();
 
-      {/* Logo & Close Button (Mobile) */}
-      <div className="flex items-center justify-between px-5 pt-6 pb-5 border-b border-white/5">
+  return (
+    <div className="w-[280px] bg-slate-900 border-r border-white/5 flex flex-col shrink-0 h-full">
+      {/* Brand header */}
+      <div className="p-6 border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-[0_4px_15px_rgba(99,102,241,0.4)]" style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}>
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-indigo-700 flex items-center justify-center shadow-lg shadow-indigo-500/30">
             <Leaf size={20} color="white" />
           </div>
           <div>
-            <div className="font-extrabold text-[15px] tracking-tight text-white">EcoSyz</div>
-            <div className="text-[11px] text-white/45 font-medium mt-0.5">Super Admin Portal</div>
+            <div className="text-[17px] font-black tracking-tight text-white flex items-center gap-1">
+              EcoSyz <span className="text-[10px] uppercase tracking-widest bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-1.5 py-0.5 rounded-md font-bold">Admin</span>
+            </div>
+            <div className="text-[11px] text-white/35 font-medium">Smart Waste Platform</div>
           </div>
         </div>
-        {/* Close Button only visible on small screens */}
+
+        {/* Close Button for Mobile Drawer */}
         {onClose && (
-          <button onClick={onClose} className="lg:hidden p-1.5 rounded-lg bg-white/5 text-white/60 hover:text-white hover:bg-white/10 transition-colors">
-            <X size={18} />
+          <button 
+            onClick={onClose}
+            className="lg:hidden p-1.5 text-white/40 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+          >
+            <X size={20} />
           </button>
         )}
       </div>
 
-      {/* Nav label */}
-      <div className="px-5 pt-5 pb-2 text-[10px] font-bold text-white/30 tracking-widest uppercase">
-        Navigation
-      </div>
-
-      {/* Nav Items */}
-      <nav className="flex-1 px-3 overflow-y-auto custom-scrollbar">
-        {navItems.map((item) => {
+      {/* Nav items */}
+      <nav className="flex-1 p-3.5 space-y-1 overflow-y-auto">
+        <div className="text-[11px] font-bold uppercase tracking-wider text-white/25 px-3 pt-2 pb-1.5">Platform</div>
+        {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
+          const isActive = pathname === item.path || (item.path !== '/dashboard' && pathname?.startsWith(item.path));
           return (
-            <NavLink
-              key={item.id}
-              to={item.path}
-              onClick={() => { if(window.innerWidth < 1024 && onClose) onClose(); }}
-              className={({ isActive }) => `
-                flex items-center gap-3 px-3 py-2.5 rounded-xl mb-1 cursor-pointer no-underline relative transition-all duration-150
+            <Link
+              key={item.path}
+              href={item.path}
+              onClick={onClose}
+              className={`
+                relative flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer
+                transition-all duration-150 group text-left no-underline block
                 ${isActive ? "bg-indigo-500/20 border border-indigo-500/30" : "bg-transparent border border-transparent hover:bg-white/5 hover:border-white/10 sidebar-nav-item"}
               `}
             >
-              {({ isActive }) => (
-                <>
-                  {/* Active left bar */}
-                  {isActive && (
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[60%] bg-indigo-500 rounded-r-sm" />
-                  )}
-                  <div className={`w-[34px] h-[34px] rounded-lg flex items-center justify-center shrink-0 transition-all duration-150 ${isActive ? "bg-indigo-500/25" : "bg-white/5"}`}>
-                    <Icon size={17} color={isActive ? "#818cf8" : "rgba(255,255,255,0.45)"} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className={`text-[13px] leading-[1.2] ${isActive ? "font-bold text-indigo-100" : "font-medium text-white/70"}`}>{item.name}</div>
-                    <div className="text-[11px] text-white/30 mt-0.5 truncate">{item.sub}</div>
-                  </div>
-                  {isActive && <ChevronRight size={14} color="#6366f1" className="shrink-0" />}
-                </>
+              {/* Active left bar */}
+              {isActive && (
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[60%] bg-indigo-500 rounded-r-sm" />
               )}
-            </NavLink>
+              <div className="flex items-center gap-3 w-full">
+                <div className={`w-[34px] h-[34px] rounded-lg flex items-center justify-center shrink-0 transition-all duration-150 ${isActive ? "bg-indigo-500/25" : "bg-white/5"}`}>
+                  <Icon size={17} color={isActive ? "#818cf8" : "rgba(255,255,255,0.45)"} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className={`text-[13px] leading-[1.2] ${isActive ? "font-bold text-indigo-100" : "font-medium text-white/70"}`}>{item.name}</div>
+                  <div className="text-[11px] text-white/30 mt-0.5 truncate">{item.sub}</div>
+                </div>
+                {isActive && <ChevronRight size={14} color="#6366f1" className="shrink-0" />}
+              </div>
+            </Link>
           );
         })}
       </nav>

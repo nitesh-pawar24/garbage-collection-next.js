@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect } from 'react'
 import api from '../api/axios'
 import { ChevronDown } from 'lucide-react'

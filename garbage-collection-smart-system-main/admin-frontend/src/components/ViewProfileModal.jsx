@@ -1,3 +1,4 @@
+'use client';
 import { useEffect } from 'react'
 import { X, User, Edit, ShieldCheck, Trash2 } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -5,7 +6,7 @@ import { motion } from 'framer-motion'
 export default function ViewProfileModal({ isOpen, onClose, user, onEdit, onDelete }) {
   useEffect(() => {
     if (isOpen) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [isOpen]);
 

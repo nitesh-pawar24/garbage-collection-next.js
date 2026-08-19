@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronDown, Leaf, Menu, X as Close, MapPin, Edit3, User as UserIcon, LogOut, LayoutDashboard, Bell } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,8 +17,8 @@ const Navbar = ({ currentPage, navigate }) => {
     const profileRef = useRef(null);
 
     // Auth
-    const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const user = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('user') || 'null') : null;
     const isLoggedIn = !!token && !!user;
 
     useEffect(() => {

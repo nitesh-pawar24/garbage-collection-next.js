@@ -1,3 +1,4 @@
+'use client';
 // frontend/src/component/auth/ForgotPasswordPage.jsx
 
 import React from 'react';

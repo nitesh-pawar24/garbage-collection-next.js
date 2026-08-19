@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { BookOpen, Download, ExternalLink, FileText, Video, ChevronRight, Play } from 'lucide-react';

@@ -1,3 +1,4 @@
+'use client';
 import { useState } from "react";
 import { Search, Filter, RefreshCw, ArrowUpRight, Zap } from "lucide-react";
 import ReactivateSubscriptionModal from "./ReactivateSubscriptionModal";

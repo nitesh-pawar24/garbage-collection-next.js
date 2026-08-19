@@ -1,45 +1,29 @@
+'use client';
 import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import TopHeader from './TopHeader';
+import { useTheme } from '../contexts/ThemeContext';
+import SubscriptionExpiredOverlay from './SubscriptionExpiredOverlay';
 
 export default function Layout({ children }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
-  const closeSidebar = () => setIsSidebarOpen(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { isDark } = useTheme();
 
   return (
-    <div className="flex min-h-screen bg-mesh overflow-x-hidden">
-      {/* Sidebar - Desktop: fixed, Mobile: drawer — z-[10001] stays above modals */}
-      <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 transition-all duration-300 lg:ml-64">
-        {/* Header with hamburger for mobile — z-[10001] stays above modals */}
-        <TopHeader onMenuClick={toggleSidebar} />
-
-        {/* Content with padding that adjusts for header */}
-        {/* position:relative + isolation:isolate creates a stacking context so
-            modal backdrops rendered here don't leak over sidebar/header */}
-        <main
-          id="admin-content-area"
-          className="flex-1 pt-20 px-4 sm:px-6 lg:px-8 pb-10 relative"
-          style={{ isolation: 'isolate' }}
-        >
-          <Outlet />
-          {/* Portal target: modals teleport here so they stay within content area */}
-          <div id="modal-root" />
+    <div className="flex h-screen overflow-hidden" style={{ background: isDark ? '#020617' : '#f0f4f8' }}>
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+        <TopHeader onMenuClick={() => setSidebarOpen(true)} />
+        
+        <main className="flex-1 overflow-y-auto overflow-x-hidden p-3 md:p-5 lg:p-6 pb-20 md:pb-6 relative z-10 transition-colors duration-200">
+          <div className="max-w-[1600px] mx-auto w-full">
+            {children}
+          </div>
         </main>
       </div>
 
-      {/* Mobile Backdrop */}
-      {isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300" 
-          onClick={closeSidebar}
-        />
-      )}
+      <SubscriptionExpiredOverlay />
     </div>
   );
 }

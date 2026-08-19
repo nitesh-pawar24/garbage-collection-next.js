@@ -1,3 +1,4 @@
+'use client';
 import { X, AlertTriangle, UserX } from 'lucide-react'
 
 export default function DeactivateUserModal({ isOpen, onClose, user, onDeactivate }) {

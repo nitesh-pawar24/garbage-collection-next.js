@@ -1,3 +1,4 @@
+'use client';
 import { X, Eye, FileText, Check, XCircle, ChevronRight } from 'lucide-react';
 
 function InfoBlock({ label, value }) {

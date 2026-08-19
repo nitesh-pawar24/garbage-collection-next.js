@@ -1,3 +1,4 @@
+'use client';
 // frontend/src/component/auth/LoginPage.jsx
 
 import React from 'react';

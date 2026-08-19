@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Building2, TrendingUp, Truck, Users, BarChart3, LogOut } from 'lucide-react';

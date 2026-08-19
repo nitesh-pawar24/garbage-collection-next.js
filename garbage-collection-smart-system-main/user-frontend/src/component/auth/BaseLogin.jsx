@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { Phone, KeyRound, X, ArrowRight, Shield, Zap, Leaf, Clock, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';

@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { Gauge, Leaf } from 'lucide-react';
 import Button from './Button';

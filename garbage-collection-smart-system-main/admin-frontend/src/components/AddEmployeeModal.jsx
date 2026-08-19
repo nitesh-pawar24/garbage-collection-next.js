@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState } from "react";
 import { X, UserPlus, Camera, FileText, Car, Upload } from "lucide-react";
 import { toast } from "react-toastify";
@@ -16,7 +17,7 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 
   useEffect(() => {
     if (isOpen) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [isOpen]);
 

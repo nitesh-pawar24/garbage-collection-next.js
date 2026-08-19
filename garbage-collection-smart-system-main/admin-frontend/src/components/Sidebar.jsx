@@ -1,121 +1,173 @@
+'use client';
 import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import {
+  Home,
+  Users2,
+  Clock,
+  Trash2,
+  Home as HomeIcon,
+  MapPin,
+  FileText,
+  BarChart3,
+  TrendingUp,
+  Image,
+  BookOpen,
+  Users,
+  Scale,
+  CalendarDays,
+  Newspaper,
+  ChevronDown,
+  X,
+  Sparkles,
+  Calendar,
+  Mail
+} from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
-import { X, Home, Settings, BarChart3, FileText, BookOpen, Image, TrendingUp, Users, Scale, ChevronDown, Users2, Clock, Trash2, Home as HomeIcon, MapPin, CalendarDays, Newspaper, Calendar, MessageSquare, Mail } from 'lucide-react'
-import logo from '../assets/images/logo.png'
 
 export default function Sidebar({ isOpen, onClose }) {
+  const pathname = usePathname()
   const { isDark } = useTheme()
-  const location = useLocation()
-  const isOperationalActive = location.pathname.startsWith('/employee') || 
-                               location.pathname.startsWith('/attendance') || 
-                               location.pathname.startsWith('/dustbin') || 
-                               location.pathname.startsWith('/household') ||
-                               location.pathname.startsWith('/ward') ||
-                               location.pathname.startsWith('/route')
 
-  const [expandOperational, setExpandOperational] = useState(isOperationalActive)
-  
+  const [openDropdowns, setOpenDropdowns] = useState({
+    wasteManagement: true,
+    dynamicPages: false,
+  })
+
   useEffect(() => {
-    if (isOperationalActive) setExpandOperational(true)
-  }, [isOperationalActive])
+    const isWasteRoute = ['/employee', '/attendance', '/dustbin', '/household', '/route', '/ward'].some(p => pathname?.startsWith(p))
+    const isDynamicRoute = ['/edit-about-us', '/edit-guide', '/gallery', '/legal', '/manage-events', '/manage-news', '/manage-schedule', '/manage-leadership'].some(p => pathname?.startsWith(p))
 
-  // Close sidebar on route change (mobile)
-  useEffect(() => {
-    if (isOpen) onClose()
-  }, [location.pathname])
+    if (isWasteRoute) setOpenDropdowns(prev => ({ ...prev, wasteManagement: true }))
+    if (isDynamicRoute) setOpenDropdowns(prev => ({ ...prev, dynamicPages: true }))
+  }, [pathname])
 
-  const isActive = (path) => location.pathname === path
+  const toggleDropdown = (key) => {
+    setOpenDropdowns(prev => ({ ...prev, [key]: !prev[key] }))
+  }
 
   const NavLink = ({ to, icon: Icon, label, small = false }) => {
-    const active = isActive(to)
+    const active = pathname === to
+
     return (
       <Link
-        to={to}
-        className={`flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 group relative ${
-          active
-            ? 'bg-gradient-to-r from-[#1f9e9a] to-[#16847f] text-white shadow-md shadow-teal-500/25'
-            : `${!isDark ? '!text-black' : 'text-slate-300'} hover:text-black dark:hover:text-white hover:bg-teal-50 dark:hover:bg-teal-900/20`
-        }`}
+        href={to}
+        onClick={onClose}
+        className={`
+          flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-200 group relative no-underline
+          ${small ? 'text-xs pl-8' : 'text-sm font-bold'}
+          ${active
+            ? 'bg-teal-500/10 text-teal-600 dark:text-teal-400 font-bold'
+            : isDark
+              ? 'text-gray-400 hover:bg-slate-800/60 hover:text-gray-200'
+              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+          }
+        `}
       >
         {active && (
-          <span className="absolute left-0 inset-y-0 w-0.5 rounded-r bg-teal-300/60" />
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-teal-500 rounded-r-full" />
         )}
-        <Icon size={small ? 16 : 18} className={active ? 'text-white' : `${!isDark ? '!text-slate-800' : 'text-slate-400'} group-hover:text-teal-600 transition-colors`} />
-        <span className={`${small ? 'text-xs' : 'text-sm'} font-medium leading-tight`}>{label}</span>
+        <Icon
+          size={small ? 14 : 17}
+          className={`flex-shrink-0 transition-transform group-hover:scale-110 ${
+            active ? 'text-teal-500' : 'text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300'
+          }`}
+        />
+        <span className="truncate">{label}</span>
       </Link>
     )
   }
 
-  const SectionLabel = ({ label }) => (
-    <p className={`text-[10px] font-bold ${!isDark ? '!text-black' : 'text-slate-500'} uppercase tracking-[1.5px] px-4 mb-2 mt-1`}>{label}</p>
+  const DropdownHeader = ({ title, icon: Icon, isOpen: dropOpen, onClick, isChildActive }) => (
+    <button
+      onClick={onClick}
+      className={`
+        w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm font-bold transition-all duration-200
+        ${isChildActive
+          ? 'text-teal-600 dark:text-teal-400'
+          : isDark
+            ? 'text-gray-400 hover:bg-slate-800/60 hover:text-gray-200'
+            : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+        }
+      `}
+    >
+      <div className="flex items-center gap-3">
+        <Icon size={17} className={isChildActive ? 'text-teal-500' : 'text-gray-400'} />
+        <span>{title}</span>
+      </div>
+      <ChevronDown
+        size={14}
+        className={`transition-transform duration-200 ${dropOpen ? 'rotate-180 text-teal-500' : 'text-gray-400'}`}
+      />
+    </button>
   )
 
+  const isWasteActive = ['/employee', '/attendance', '/dustbin', '/household', '/route', '/ward'].some(p => pathname?.startsWith(p))
+  const isDynamicActive = ['/edit-about-us', '/edit-guide', '/gallery', '/legal', '/manage-events', '/manage-news', '/manage-schedule', '/manage-leadership'].some(p => pathname?.startsWith(p))
+
   return (
-    <div 
-      className={`fixed left-0 top-0 w-64 h-screen overflow-y-auto flex flex-col transition-all duration-300 z-[10001] 
-        ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-        border-r lg:border-r-0`}
-      style={{
-        background: isDark 
-          ? 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)' 
-          : 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
-        borderRight: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #e2e8f0'
-      }}
-    >
-      {/* Logo */}
-      <div className="px-5 py-5 border-b border-gray-100 dark:border-white/5 flex-shrink-0 relative">
-        <div className="flex items-center gap-3">
-          <img src={logo} alt="EcoSyz Logo" className="w-9 h-9 object-contain drop-shadow-md" />
-          <div>
-            <p className={`${!isDark ? '!text-black' : 'text-gray-100'} font-bold text-sm leading-tight`}>EcoSyz Admin</p>
-            <p className={`${!isDark ? '!text-slate-800' : 'text-gray-500'} text-[10px] font-medium`}>Panchayat Management</p>
-          </div>
-        </div>
-
-        {/* Mobile Close Button */}
-        <button 
+    <>
+      {isOpen && (
+        <div
           onClick={onClose}
-          className="lg:hidden absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-lg text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden transition-opacity"
+        />
+      )}
+
+      <aside
+        className={`
+          fixed top-0 bottom-0 left-0 z-50 w-64 lg:static lg:z-auto
+          flex flex-col border-r transition-all duration-300 ease-in-out
+          ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        `}
+        style={{
+          background: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'
+        }}
+      >
+        {/* Brand Header */}
+        <div className="flex items-center justify-between p-5 border-b"
+          style={{ borderColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)' }}
         >
-          <X size={20} />
-        </button>
-      </div>
-
-      {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-5 overflow-y-auto">
-
-        {/* Main */}
-        <div>
-          <SectionLabel label="Main" />
-          <div className="space-y-1">
-            <NavLink to="/dashboard" icon={Home} label="Central Admin Dashboard" />
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center shadow-lg shadow-teal-500/20 text-white font-black text-xl">
+              E
+            </div>
+            <div>
+              <h1 className="font-extrabold text-sm tracking-tight leading-none" style={{ color: isDark ? 'white' : '#0f172a' }}>
+                EcoSyz <span className="text-teal-500 font-bold text-xs uppercase px-1 py-0.5 rounded bg-teal-500/10 ml-0.5">Admin</span>
+              </h1>
+              <p className="text-[10px] text-gray-400 mt-1 font-medium">Smart Waste System</p>
+            </div>
           </div>
+          <button
+            onClick={onClose}
+            className="lg:hidden p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-slate-800"
+          >
+            <X size={18} />
+          </button>
         </div>
 
-        {/* Operational */}
-        <div>
-          <SectionLabel label="Operational" />
-          <div className="space-y-1">
-            <button
-              type="button"
-              onClick={() => setExpandOperational(!expandOperational)}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 group ${
-                isOperationalActive
-                  ? 'bg-gradient-to-r from-[#1f9e9a] to-[#16847f] text-white shadow-md shadow-teal-500/25'
-                  : `${!isDark ? '!text-black' : 'text-slate-300'} hover:text-black dark:hover:text-white hover:bg-teal-50 dark:hover:bg-teal-900/20`
-              }`}
-            >
-              <Settings size={18} className={isOperationalActive ? 'text-white' : `${!isDark ? '!text-slate-800' : 'text-slate-400'} group-hover:text-teal-600 transition-colors`} />
-              <span className="text-sm font-medium flex-1 text-left">Operational Mgmt</span>
-              <ChevronDown
-                size={14}
-                className={`transition-transform duration-300 ${expandOperational ? 'rotate-180' : ''} ${isOperationalActive ? 'text-white' : `${!isDark ? '!text-slate-800' : 'text-slate-400'}`}`}
-              />
-            </button>
+        {/* Nav Links */}
+        <div className="flex-1 overflow-y-auto p-3 space-y-1 custom-scrollbar">
+          <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Main Menu</p>
+          
+          <NavLink to="/dashboard" icon={Home} label="Central Admin Dashboard" />
 
-            {expandOperational && (
-              <div className="ml-3 pl-3 border-l border-teal-400/30 space-y-0.5 mt-1">
+          {/* Waste Management Dropdown */}
+          <div className="space-y-0.5">
+            <DropdownHeader
+              title="Waste Management"
+              icon={Trash2}
+              isOpen={openDropdowns.wasteManagement}
+              onClick={() => toggleDropdown('wasteManagement')}
+              isChildActive={isWasteActive}
+            />
+            {openDropdowns.wasteManagement && (
+              <div className="space-y-0.5 pt-0.5">
                 <NavLink to="/employee" icon={Users2} label="Employee Management" small />
                 <NavLink to="/attendance" icon={Clock} label="Attendance Management" small />
                 <NavLink to="/dustbin" icon={Trash2} label="Dustbin Management" small />
@@ -125,58 +177,56 @@ export default function Sidebar({ isOpen, onClose }) {
               </div>
             )}
           </div>
+
+          <NavLink to="/report-complaint" icon={FileText} label="Report & Complaint Mgmt" />
+          <NavLink to="/waste-data" icon={BarChart3} label="Waste Data Management" />
+          <NavLink to="/contact-queries" icon={Mail} label="Contact Queries" />
+          <NavLink to="/schedule-bookings" icon={Calendar} label="Schedule Bookings" />
+
+          <p className="px-3 pt-4 text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">CMS & Content</p>
+
+          {/* Dynamic Pages Dropdown */}
+          <div className="space-y-0.5">
+            <DropdownHeader
+              title="Dynamic Pages"
+              icon={Sparkles}
+              isOpen={openDropdowns.dynamicPages}
+              onClick={() => toggleDropdown('dynamicPages')}
+              isChildActive={isDynamicActive}
+            />
+            {openDropdowns.dynamicPages && (
+              <div className="space-y-0.5 pt-0.5">
+                <NavLink to="/edit-about-us" icon={BookOpen} label="Edit About Us" small />
+                <NavLink to="/edit-guide" icon={BookOpen} label="Edit Segregation Guide" small />
+                <NavLink to="/gallery" icon={Image} label="Manage Photo Gallery" small />
+                <NavLink to="/manage-events" icon={CalendarDays} label="Events & Workshops" small />
+                <NavLink to="/manage-news" icon={Newspaper} label="News & Updates" small />
+                <NavLink to="/manage-schedule" icon={Calendar} label="Ward Schedule" small />
+                <NavLink to="/manage-leadership" icon={Users} label="Leadership" small />
+              </div>
+            )}
+          </div>
+
+          <NavLink to="/reports" icon={TrendingUp} label="Report Generation & Analytics" />
+          <NavLink to="/settings" icon={Users} label="User Management & Settings" />
+          <NavLink to="/legal" icon={Scale} label="Legal & Transparency" />
         </div>
 
-        {/* Reports */}
-        <div>
-          <SectionLabel label="Reports & Complaints" />
-          <div className="space-y-1">
-            <NavLink to="/report-complaint" icon={FileText} label="Report & Complaint Mgmt" />
-            <NavLink to="/waste-data" icon={BarChart3} label="Waste Data Management" />
-            <NavLink to="/contact-queries" icon={Mail} label="Contact Queries" />
-            <NavLink to="/schedule-bookings" icon={Calendar} label="Schedule Bookings" />
+        {/* Footer info */}
+        <div className="p-3 border-t text-center"
+          style={{ borderColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)' }}
+        >
+          <div className="p-2.5 rounded-xl bg-teal-500/5 dark:bg-teal-500/10 flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-teal-500/20 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold text-xs">
+              V1
+            </div>
+            <div className="text-left">
+              <p className="text-[11px] font-bold" style={{ color: isDark ? 'white' : '#0f172a' }}>Panchayat System</p>
+              <p className="text-[9px] text-gray-400">All systems online</p>
+            </div>
           </div>
         </div>
-
-        {/* CMS */}
-        <div>
-          <SectionLabel label="Public Website CMS" />
-          <div className="space-y-1">
-            <NavLink to="/edit-about-us" icon={BookOpen} label="Edit About Us" />
-            <NavLink to="/edit-guide" icon={BookOpen} label="Edit Segregation Guide" />
-            <NavLink to="/gallery" icon={Image} label="Manage Photo Gallery" />
-            <NavLink to="/manage-events" icon={CalendarDays} label="Events & Workshops" />
-            <NavLink to="/manage-news" icon={Newspaper} label="News & Updates" />
-            <NavLink to="/manage-schedule" icon={Calendar} label="Ward Schedule" />
-            <NavLink to="/manage-leadership" icon={Users} label="Leadership" />
-          </div>
-        </div>
-
-        {/* Settings */}
-        <div>
-          <SectionLabel label="Analytics & Settings" />
-          <div className="space-y-1">
-            <NavLink to="/reports" icon={TrendingUp} label="Report Generation & Analytics" />
-            <NavLink to="/settings" icon={Users} label="User Management & Settings" />
-            <NavLink to="/legal" icon={Scale} label="Legal & Transparency" />
-          </div>
-        </div>
-      </nav>
-
-      {/* Footer */}
-      <div className={`px-4 py-3 border-t flex-shrink-0 ${isDark ? 'border-white/5 bg-gray-900/50' : 'border-gray-100 bg-white'}`}>
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
-            style={{ background: 'linear-gradient(135deg, #1f9e9a, #22c55e)' }}
-          >
-            A
-          </div>
-          <div className="min-w-0">
-            <p className={`${!isDark ? '!text-black' : 'text-gray-100'} text-xs font-bold truncate`}>Panchayat Admin</p>
-            <p className={`${!isDark ? '!text-slate-800' : 'text-gray-500'} text-[10px]`}>ecosyz.in</p>
-          </div>
-        </div>
-      </div>
-    </div>
+      </aside>
+    </>
   )
 }

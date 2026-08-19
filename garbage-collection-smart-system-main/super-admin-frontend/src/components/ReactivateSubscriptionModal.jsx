@@ -1,3 +1,4 @@
+'use client';
 import { X, Layers, Check } from "lucide-react";
 
 const planConfig = {

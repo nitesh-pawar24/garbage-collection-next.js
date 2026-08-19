@@ -77,3 +77,4 @@ To evaluate the system, please use the following credentials for the respective 
 - **OTP**: Provide any simple testing OTP (e.g. `123456`) if prompted, or check the backend console logs.
 
 > **Note:** All logins use OTP (One-Time Password) based authentication. During local testing, the OTP may be printed directly in the backend terminal console. Ensure the backend server is running to view these testing OTPs.
+

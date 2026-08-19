@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -60,7 +61,7 @@ const ScheduleBooking = ({ navigate }) => {
         if (!selectedPanchayat?._id) { toast.error('Please select a Panchayat from the header.'); return; }
         setLoading(true);
         try {
-            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            const user = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('user') || 'null') : null;
             await api.post('/schedule-bookings', {
                 panchayatId: selectedPanchayat._id,
                 wasteType: formData.wasteType,

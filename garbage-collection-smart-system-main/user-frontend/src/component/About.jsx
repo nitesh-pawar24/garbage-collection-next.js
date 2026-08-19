@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Leaf, FileText, LineChart, Calendar, Scale, Users, Globe, Shield, Award } from 'lucide-react';

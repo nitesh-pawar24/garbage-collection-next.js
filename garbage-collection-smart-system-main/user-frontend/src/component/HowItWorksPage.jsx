@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Smartphone, UserCheck, Calendar, Truck, CheckCircle2, BarChart2, Leaf } from 'lucide-react';

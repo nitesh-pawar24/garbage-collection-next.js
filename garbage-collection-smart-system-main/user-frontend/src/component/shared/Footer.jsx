@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Leaf, Phone, Mail, MapPin, Github, Twitter, Facebook } from 'lucide-react';
 import { quickLinks } from '../../config';

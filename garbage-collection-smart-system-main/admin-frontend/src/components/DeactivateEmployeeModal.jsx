@@ -1,7 +1,8 @@
+'use client';
 import { useEffect, useRef } from "react"
 import { X, User, UserX } from "lucide-react"
 
-const RAW_API_BASE = import.meta.env.VITE_API_BASE_URL || "https://ecosyz-backend.onrender.com/api"
+const RAW_API_BASE = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://garbage-collection1.onrender.com/api") || "https://ecosyz-backend.onrender.com/api"
 const STATIC_BASE = RAW_API_BASE.replace(/\/api$/, "")
 const isImage = (path = "") => /\.(jpg|jpeg|png|webp)$/i.test(path)
 

@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect, useRef } from 'react'
 import { X, MapPin, Phone, Calendar, FileText } from 'lucide-react'
 import { toast } from 'react-toastify'
@@ -16,7 +17,7 @@ export default function ViewComplaintModal({ isOpen, onClose, complaint, onStatu
       if (modalRef.current) {
         modalRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
       } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
   }, [isOpen]);

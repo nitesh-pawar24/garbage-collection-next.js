@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { BarChart2, TrendingUp, Truck, Users, AlertCircle, CheckCircle2, Leaf, Recycle } from 'lucide-react';

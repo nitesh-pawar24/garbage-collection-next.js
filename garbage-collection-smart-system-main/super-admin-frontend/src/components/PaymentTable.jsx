@@ -1,3 +1,4 @@
+'use client';
 import { useState } from 'react';
 import { Search, Download, Eye } from 'lucide-react';
 import PaymentDetailsModal from './PaymentDetailsModal';

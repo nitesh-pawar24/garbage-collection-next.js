@@ -1,3 +1,4 @@
+'use client';
 import { X, AlertTriangle } from 'lucide-react'
 
 export default function DeactivateProfileModal({ isOpen, onClose, profile }) {

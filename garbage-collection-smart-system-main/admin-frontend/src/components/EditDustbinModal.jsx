@@ -1,3 +1,4 @@
+'use client';
 import { X, Edit2 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import api from '../api/axios'
@@ -40,7 +41,7 @@ export default function EditDustbinModal({ isOpen, onClose, dustbin, onUpdate })
 
   useEffect(() => {
     if (isOpen) {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }, [isOpen])
 

@@ -1,9 +1,10 @@
+'use client';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, Mail, Phone, MapPin, Lock, Save, Edit3, ArrowLeft, Shield } from 'lucide-react';
 
 const UserProfile = ({ navigate }) => {
-    const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
+    const storedUser = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('user') || 'null') : null;
     const [isEditing, setIsEditing] = useState(false);
     const [profile, setProfile] = useState({
         name: storedUser?.name || 'John Doe',

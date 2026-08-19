@@ -1,3 +1,4 @@
+'use client';
 import { AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
 
 const ICON_MAP = {

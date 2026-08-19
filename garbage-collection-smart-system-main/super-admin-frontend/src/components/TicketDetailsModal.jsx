@@ -1,3 +1,4 @@
+'use client';
 import { X, Ticket, Building2, Layout, Clock, CheckCircle2, AlertCircle, Info, MessageSquare } from "lucide-react";
 
 function DetailRow({ icon: Icon, label, value, color = "#64748b" }) {

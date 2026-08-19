@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertCircle, CheckCircle2, X, Leaf, ImagePlus } from 'lucide-react';
@@ -11,7 +12,7 @@ const complaintTypes = ['Missed Bin', 'Not Segregated', 'Hazardous Waste', 'Civi
 
 const ComplaintPage = ({ navigate }) => {
     const { selectedPanchayat } = usePanchayat();
-    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    const user = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('user') || 'null') : null;
 
     const [formData, setFormData] = useState({
         name: user?.name || '',

@@ -1,3 +1,4 @@
+'use client';
 import { useEffect } from 'react'
 import { X, Home, Edit, Trash2 } from 'lucide-react'
 
@@ -11,7 +12,7 @@ const InfoRow = ({ label, value, wide }) => (
 export default function ViewHouseholdModal({ isOpen, onClose, household, onEdit, onDelete }) {
   useEffect(() => {
     if (isOpen) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [isOpen]);
 

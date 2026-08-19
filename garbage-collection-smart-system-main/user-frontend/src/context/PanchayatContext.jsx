@@ -1,56 +1,66 @@
+'use client';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import api from '../api/axios';
 
 const PanchayatContext = createContext(null);
 
 export const PanchayatProvider = ({ children }) => {
-    const [selectedPanchayat, setSelectedPanchayat] = useState(() => {
-        const stored = localStorage.getItem('selectedPanchayat');
-        return stored ? JSON.parse(stored) : null;
-    });
+  const [selectedPanchayat, setSelectedPanchayat] = useState(null);
+  const [isPanchayatModalOpen, setIsPanchayatModalOpen] = useState(false);
 
-    const [isPanchayatModalOpen, setIsPanchayatModalOpen] = useState(false);
-
-    // Function to refresh the selected panchayat's data from the server
-    const refreshPanchayatData = async () => {
-        if (!selectedPanchayat?._id) return;
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('selectedPanchayat');
+      if (stored) {
         try {
-            const res = await api.get(`/panchayat/${selectedPanchayat._id}`);
-            if (res.data) {
-                setSelectedPanchayat(res.data);
-            }
-        } catch (err) {
-            console.error("Failed to refresh panchayat data:", err);
+          setSelectedPanchayat(JSON.parse(stored));
+        } catch {
+          setSelectedPanchayat(null);
         }
-    };
+      } else {
+        setIsPanchayatModalOpen(true);
+      }
+    }
+  }, []);
 
-    useEffect(() => {
-        if (selectedPanchayat) {
-            localStorage.setItem('selectedPanchayat', JSON.stringify(selectedPanchayat));
-            setIsPanchayatModalOpen(false);
-        } else {
-            localStorage.removeItem('selectedPanchayat');
-            setIsPanchayatModalOpen(true);
-        }
-    }, [selectedPanchayat]);
+  const refreshPanchayatData = async () => {
+    if (!selectedPanchayat?._id) return;
+    try {
+      const res = await api.get(`/panchayat/${selectedPanchayat._id}`);
+      if (res.data) {
+        setSelectedPanchayat(res.data);
+      }
+    } catch (err) {
+      console.error("Failed to refresh panchayat data:", err);
+    }
+  };
 
-    return (
-        <PanchayatContext.Provider value={{ 
-            selectedPanchayat, 
-            setSelectedPanchayat, 
-            isPanchayatModalOpen, 
-            setIsPanchayatModalOpen,
-            refreshPanchayatData
-        }}>
-            {children}
-        </PanchayatContext.Provider>
-    );
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (selectedPanchayat) {
+        localStorage.setItem('selectedPanchayat', JSON.stringify(selectedPanchayat));
+        setIsPanchayatModalOpen(false);
+      }
+    }
+  }, [selectedPanchayat]);
+
+  return (
+    <PanchayatContext.Provider value={{ 
+      selectedPanchayat, 
+      setSelectedPanchayat, 
+      isPanchayatModalOpen, 
+      setIsPanchayatModalOpen,
+      refreshPanchayatData
+    }}>
+      {children}
+    </PanchayatContext.Provider>
+  );
 };
 
 export const usePanchayat = () => {
-    const context = useContext(PanchayatContext);
-    if (!context) {
-        throw new Error('usePanchayat must be used within a PanchayatProvider');
-    }
-    return context;
+  const context = useContext(PanchayatContext);
+  if (!context) {
+    throw new Error('usePanchayat must be used within a PanchayatProvider');
+  }
+  return context;
 };

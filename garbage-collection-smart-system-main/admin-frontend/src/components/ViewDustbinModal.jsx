@@ -1,10 +1,11 @@
+'use client';
 import { useEffect } from 'react'
 import { X, Download, Trash2, Edit, Trash } from 'lucide-react'
 
 export default function ViewDustbinModal({ isOpen, onClose, dustbin, onEdit, onDelete }) {
   useEffect(() => {
     if (isOpen) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [isOpen]);
 

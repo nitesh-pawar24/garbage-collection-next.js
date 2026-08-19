@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Edit2, Trash2, AlertCircle, Eye, Plus, CheckCircle } from 'lucide-react';

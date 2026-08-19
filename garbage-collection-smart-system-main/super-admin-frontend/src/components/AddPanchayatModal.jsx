@@ -1,3 +1,4 @@
+'use client';
 import { useState } from "react";
 import { X, Building2, User, MapPin, Home, Users, Phone, Mail, Globe, Upload, FileText, Plus } from "lucide-react";
 import api from "../api/axios";

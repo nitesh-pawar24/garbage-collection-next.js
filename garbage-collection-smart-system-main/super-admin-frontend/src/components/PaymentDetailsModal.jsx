@@ -1,3 +1,4 @@
+'use client';
 import { X, CreditCard, Calendar, Hash, Building2, Layout, CheckCircle2, XCircle, Clock } from "lucide-react";
 
 function DetailRow({ icon: Icon, label, value, color = "#64748b" }) {

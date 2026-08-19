@@ -1,14 +1,24 @@
 # Root .gitignore for monorepo
+
+# Environment files - NEVER commit these
 .env
 **/.env
 backend/.env
 admin-frontend/.env
 user-frontend/.env
 super-admin-frontend/.env
+
+# Dependencies
 node_modules/
 **/node_modules/
+
+# Next.js build output
+.next/
+**/.next/
+
+# Expo / React Native
 .expo/
-**/ .expo/
+**/.expo/
 dist/
 **/dist/
 web-build/
@@ -17,6 +27,8 @@ ios/
 **/ios/
 android/
 **/android/
+
+# Editor & OS
 .vscode/
 **/.vscode/
 *.log

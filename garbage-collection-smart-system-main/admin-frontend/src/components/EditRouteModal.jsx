@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect } from "react";
 import { X, MapPin, Truck, User } from "lucide-react";
 import api from "../api/axios";
@@ -21,7 +22,7 @@ export default function EditRouteModal({ isOpen, onClose, onSuccess, route }) {
 
   useEffect(() => {
     if (isOpen) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [isOpen]);
 

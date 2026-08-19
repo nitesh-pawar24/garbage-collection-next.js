@@ -1,7 +1,8 @@
+'use client';
 import { Search, Bell, LogOut, Settings, Shield, Menu } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
-import ProfileSettingsModal from "../components/ProfileSettingsModal";
+import { usePathname, useRouter } from 'next/navigation';
+import ProfileSettingsModal from "./ProfileSettingsModal";
 import api from "../api/axios";
 import LogoutConfirmation from "./LogoutConfirmation";
 
@@ -18,9 +19,10 @@ export default function TopHeader({ onMenuClick }) {
   const [openProfile, setOpenProfile] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const dropdownRef = useRef(null);
-  const location = useLocation();
+  const pathname = usePathname();
+  const router = useRouter();
 
-  const page = PAGE_LABELS[location.pathname] || { title: 'EcoSyz Admin', sub: '' };
+  const page = PAGE_LABELS[pathname] || { title: 'EcoSyz Admin', sub: '' };
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -32,10 +34,12 @@ export default function TopHeader({ onMenuClick }) {
 
   const handleLogoutConfirm = async () => {
     try { await api.post("/auth/logout"); } catch {}
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    sessionStorage.clear();
-    window.location.href = '/login';
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      sessionStorage.clear();
+      window.location.href = '/login';
+    }
   };
 
   return (

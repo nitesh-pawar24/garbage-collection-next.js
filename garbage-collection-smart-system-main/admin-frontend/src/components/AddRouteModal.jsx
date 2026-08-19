@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect } from "react";
 import { X, MapPin, Truck, User } from "lucide-react";
 import api from "../api/axios";

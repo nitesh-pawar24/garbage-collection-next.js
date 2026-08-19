@@ -1,0 +1,16 @@
+{
+  "name": "garbage-collection-smart-system",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently --names \"BACKEND,USER,ADMIN,SUPER\" --prefix-colors \"cyan,green,yellow,magenta\" \"npm run dev --prefix backend\" \"npm run dev --prefix user-frontend\" \"npm run dev --prefix admin-frontend\" \"npm run dev --prefix super-admin-frontend\"",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:user":    "npm run dev --prefix user-frontend",
+    "dev:admin":   "npm run dev --prefix admin-frontend",
+    "dev:super":   "npm run dev --prefix super-admin-frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
+

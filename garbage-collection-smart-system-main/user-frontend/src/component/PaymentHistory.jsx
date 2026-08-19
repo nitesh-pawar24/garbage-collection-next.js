@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { CreditCard, Download, AlertCircle, CheckCircle2, ArrowLeft, TrendingUp } from 'lucide-react';

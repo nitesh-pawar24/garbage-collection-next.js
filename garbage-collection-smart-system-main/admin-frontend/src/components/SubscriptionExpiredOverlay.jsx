@@ -1,3 +1,4 @@
+'use client';
 import { AlertTriangle, PhoneCall, Mail, RefreshCw } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
 

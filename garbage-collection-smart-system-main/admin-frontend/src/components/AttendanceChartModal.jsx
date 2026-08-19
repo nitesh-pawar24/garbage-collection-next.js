@@ -1,3 +1,4 @@
+'use client';
 import { X } from 'lucide-react'
 
 export default function AttendanceChartModal({ isOpen, onClose, presentCount, absentCount, attendanceData }) {
