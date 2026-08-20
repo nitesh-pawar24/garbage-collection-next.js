@@ -201,3 +201,36 @@ export const upgradeSubscription = async (req, res) => {
     res.status(500).json({ message: 'Plan change failed' })
   }
 }
+
+/* ===============================
+   MY SUBSCRIPTION STATUS (PANCHAYAT_ADMIN self-query — works even when expired)
+================================ */
+export const getMySubscriptionStatus = async (req, res) => {
+  try {
+    const panchayatId = req.user?.panchayatId;
+    if (!panchayatId) {
+      return res.json({ status: 'NO_SUBSCRIPTION', planName: null, endDate: null, graceEndDate: null });
+    }
+
+    const sub = await Subscription.findOne({ panchayatId });
+    if (!sub) {
+      return res.json({ status: 'NO_SUBSCRIPTION', planName: null, endDate: null, graceEndDate: null });
+    }
+
+    const now = new Date();
+    let status = 'ACTIVE';
+    if (now > new Date(sub.graceEndDate)) status = 'EXPIRED';
+    else if (now > new Date(sub.endDate)) status = 'GRACE';
+
+    res.json({
+      status,
+      planName: sub.planName,
+      endDate: sub.endDate,
+      graceEndDate: sub.graceEndDate,
+      startDate: sub.startDate,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to fetch subscription status' });
+  }
+};

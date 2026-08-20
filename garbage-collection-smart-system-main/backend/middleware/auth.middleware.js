@@ -102,6 +102,7 @@ export const protect = async (req, res, next) => {
     if (
       (req.user.role === "PANCHAYAT_ADMIN" || req.user.role === "EMPLOYEE") &&
       !req.originalUrl.startsWith("/api/auth") &&
+      !req.originalUrl.includes("/api/subscriptions/my-status") &&
       req.user.panchayatId
     ) {
       const subscription = await Subscription.findOne({ panchayatId: req.user.panchayatId });
