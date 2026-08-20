@@ -120,6 +120,7 @@ const HouseholdDashboard = ({ navigate }) => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         navigate('home');
+        window.location.href = '/';
     };
 
     const schedules = dashboardData.upcomingPickups;

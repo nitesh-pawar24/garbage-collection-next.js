@@ -51,7 +51,9 @@ const Navbar = ({ currentPage, navigate }) => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         setShowLogoutModal(false);
+        setAuthData({ token: null, user: null, isLoggedIn: false });
         navigate('home');
+        window.location.href = '/';
     };
 
     const navigateToDashboard = () => {
