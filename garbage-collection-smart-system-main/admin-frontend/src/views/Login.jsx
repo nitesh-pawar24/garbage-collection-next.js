@@ -1,5 +1,5 @@
 'use client';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { Phone, Key, X, ArrowRight, RefreshCw } from "lucide-react";
 import logo from '../assets/images/logo.png';
@@ -16,6 +16,18 @@ export default function Login() {
   const [timer, setTimer] = useState(0);
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [otpToShow, setOtpToShow] = useState("");
+
+  // Generate bubble styles only on the client (after mount) to avoid SSR hydration mismatch
+  const [bubbles, setBubbles] = useState([]);
+  useEffect(() => {
+    setBubbles([...Array(6)].map(() => ({
+      width: `${20 + Math.random() * 60}px`,
+      height: `${20 + Math.random() * 60}px`,
+      left: `${Math.random() * 100}%`,
+      animationDuration: `${15 + Math.random() * 15}s`,
+      animationDelay: `${Math.random() * 10}s`,
+    })));
+  }, []);
 
   const handleSendOtp = async (e) => {
     e.preventDefault();
@@ -119,14 +131,8 @@ export default function Login() {
       }} />
 
       {/* Floating Bubbles */}
-      {[...Array(6)].map((_, i) => (
-        <div key={i} className="bubble" style={{
-          width: `${20 + Math.random() * 60}px`,
-          height: `${20 + Math.random() * 60}px`,
-          left: `${Math.random() * 100}%`,
-          animationDuration: `${15 + Math.random() * 15}s`,
-          animationDelay: `${Math.random() * 10}s`,
-        }} />
+      {bubbles.map((style, i) => (
+        <div key={i} className="bubble" style={style} />
       ))}
 
       {/* ── Left decorative panel ── */}

@@ -1,5 +1,5 @@
 'use client';
-import Layout from '../components/Layout';
+
 import PaymentOverviewCard from '../components/PaymentOverviewCard';
 import PaymentTable from '../components/PaymentTable';
 
@@ -18,7 +18,7 @@ const paymentData = [
 
 export default function PaymentMonitoring() {
   return (
-    <Layout>
+    <>
       {/* Stat cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-7">
         {overviewStats.map(s => <PaymentOverviewCard key={s.id} stat={s} />)}
@@ -34,6 +34,6 @@ export default function PaymentMonitoring() {
           <PaymentTable paymentData={paymentData} />
         </div>
       </div>
-    </Layout>
+    </>
   );
 }

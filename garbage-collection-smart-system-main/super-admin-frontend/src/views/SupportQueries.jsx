@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import Layout from '../components/Layout';
+
 import TicketOverviewCard from '../components/TicketOverviewCard';
 import TicketsTable from '../components/TicketsTable';
 
@@ -21,7 +21,7 @@ export default function SupportQueries() {
   const [selectedFilter, setSelectedFilter] = useState('All');
 
   return (
-    <Layout>
+    <>
       {/* Stat cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-7">
         {overviewStats.map(s => <TicketOverviewCard key={s.id} stat={s} />)}
@@ -37,6 +37,6 @@ export default function SupportQueries() {
           <TicketsTable ticketData={ticketData} selectedFilter={selectedFilter} onFilterChange={setSelectedFilter} />
         </div>
       </div>
-    </Layout>
+    </>
   );
 }

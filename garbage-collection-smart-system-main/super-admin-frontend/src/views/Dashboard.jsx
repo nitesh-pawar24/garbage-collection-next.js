@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from "react";
-import Layout from "../components/Layout";
+
 import VerificationTable from "../components/VerificationTable";
 import AddPanchayatModal from "../components/AddPanchayatModal";
 import api from "../api/axios";
@@ -41,7 +41,7 @@ export default function Dashboard() {
   }, [refreshKey]);
 
   return (
-    <Layout>
+    <>
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-7">
         <StatCard icon={Building2}     label="Total Panchayats"    value={stats.totalPanchayats}    loading={loading} color="#6366f1" bg="rgba(99,102,241,0.1)"  />
@@ -71,6 +71,6 @@ export default function Dashboard() {
       </div>
 
       <AddPanchayatModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSuccess={() => setRefreshKey((p) => p + 1)} />
-    </Layout>
+    </>
   );
 }

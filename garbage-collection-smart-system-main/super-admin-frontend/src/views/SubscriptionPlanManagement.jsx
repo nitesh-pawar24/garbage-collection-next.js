@@ -1,5 +1,5 @@
 'use client';
-import Layout from "../components/Layout";
+
 import PlanCard from "../components/PlanCard";
 import SubscriptionTable from "../components/SubscriptionTable";
 import { useEffect, useState } from "react";
@@ -29,7 +29,7 @@ export default function SubscriptionPlanManagement() {
   useEffect(() => { fetchSubscriptions(); }, []);
 
   return (
-    <Layout>
+    <>
       {/* Plans */}
       <div className="mb-7">
         <div className="mb-5">
@@ -55,6 +55,6 @@ export default function SubscriptionPlanManagement() {
           )}
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
