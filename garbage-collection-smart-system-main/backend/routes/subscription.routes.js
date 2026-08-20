@@ -13,28 +13,28 @@ const router = express.Router();
 router.post(
   "/",
   protect,
-  allowRoles("COMPANY_ADMIN"),
+  allowRoles("COMPANY_ADMIN", "SUPER_ADMIN"),
   createSubscription
 );
 
 router.get(
   "/",
   protect,
-  allowRoles("COMPANY_ADMIN"),
+  allowRoles("COMPANY_ADMIN", "SUPER_ADMIN"),
   listAllSubscriptions
 );
 
 router.put(
   "/:subscriptionId/reactivate",
   protect,
-  allowRoles("COMPANY_ADMIN"),
+  allowRoles("COMPANY_ADMIN", "SUPER_ADMIN"),
   reactivateSubscription
 );
 
 router.put(
   "/:subscriptionId/upgrade",
   protect,
-  allowRoles("COMPANY_ADMIN"),
+  allowRoles("COMPANY_ADMIN", "SUPER_ADMIN"),
   upgradeSubscription
 );
 
