@@ -101,6 +101,7 @@ export const protect = async (req, res, next) => {
     // Only block PANCHAYAT_ADMIN and EMPLOYEE roles. Prevent blocking COMPANY_ADMIN.
     if (
       (req.user.role === "PANCHAYAT_ADMIN" || req.user.role === "EMPLOYEE") &&
+      req.user.role !== "COMPANY_ADMIN" &&
       !req.originalUrl.startsWith("/api/auth") &&
       !req.originalUrl.includes("/api/subscriptions/my-status") &&
       req.user.panchayatId

@@ -75,8 +75,15 @@ const HouseholdDashboard = ({ navigate }) => {
     const [complaints, setComplaints] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showLogoutModal, setShowLogoutModal] = useState(false);
-    const user = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('user') || 'null') : null;
-    const initials = user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'U';
+    const [mounted, setMounted] = useState(false);
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        setUser(JSON.parse(localStorage.getItem('user') || 'null'));
+        setMounted(true);
+    }, []);
+
+    const initials = mounted ? (user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'U') : 'U';
 
     const [dashboardData, setDashboardData] = useState({
         totalPickups: 0,

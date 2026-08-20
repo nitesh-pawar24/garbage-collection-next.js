@@ -5,7 +5,7 @@ import User from "./models/User.model.js";
 
 dotenv.config();
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
-const MOBILE_NUMBER = "9999999999"; 
+const MOBILE_NUMBER = "1111111111";
 
 const run = async () => {
   try {

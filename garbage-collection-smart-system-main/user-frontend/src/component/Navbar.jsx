@@ -16,16 +16,21 @@ const Navbar = ({ currentPage, navigate }) => {
     const dropdownRef = useRef(null);
     const profileRef = useRef(null);
 
-    // Auth
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    const user = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('user') || 'null') : null;
-    const isLoggedIn = !!token && !!user;
+    const [mounted, setMounted] = useState(false);
+    const [authData, setAuthData] = useState({ token: null, user: null, isLoggedIn: false });
 
     useEffect(() => {
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        setAuthData({ token, user, isLoggedIn: !!token && !!user });
+        setMounted(true);
+
         const onScroll = () => setScrolled(window.scrollY > 10);
         window.addEventListener('scroll', onScroll);
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
+
+    const { token, user, isLoggedIn } = authData;
 
     // Close dropdowns on outside click
     useEffect(() => {

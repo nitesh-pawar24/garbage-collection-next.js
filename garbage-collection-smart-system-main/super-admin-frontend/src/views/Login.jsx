@@ -31,7 +31,6 @@ export default function Login({ onLoginSuccess }) {
         if (res.data.token) {
           localStorage.setItem("token", res.data.token);
         }
-        await api.get("/company/dashboard");
         showPopup("Login successful! Welcome back.");
         setTimeout(onLoginSuccess, 900);
       }
